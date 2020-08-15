@@ -1,0 +1,4 @@
+local Hashes = {
+    Kick = "e06edc5a"
+}
+return Hashes;
