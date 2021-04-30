@@ -56,11 +56,6 @@ function Teleport(Cframe)
     end)
 end
 function EquipCuffs()
-    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
-        if v:IsA('ScreenGui') then
-            v.Enabled = false    
-        end
-    end
     for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.HotbarGui.Container:GetChildren()) do
         if v:FindFirstChild('Icon') and v.Icon.Image == 'rbxassetid://700374045' then
             Cuffs = v
