@@ -1,4 +1,98 @@
-local Hashes = {
-    Kick = "e06edc5a"
-}
-return Hashes;
+repeat wait() until game:IsLoaded()
+function ServerHop() 
+    local HttpService, TPService = game:GetService("HttpService"), game:GetService("TeleportService")
+    function RandomServer()
+        Temp_Servers = {}
+        local ServersToTP = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+        for i,v in pairs(ServersToTP.data) do
+            if v.playing ~= v.maxPlayers then
+                table.insert(Temp_Servers,v)
+            end
+        end
+        return Temp_Servers[math.random(1,#Temp_Servers)]
+    end
+    TPService:TeleportToPlaceInstance(game.PlaceId, RandomServer().id)
+end
+if not getgenv().Network then
+    repeat wait(.3)
+    for i,v in pairs(getgc(true)) do
+        if type(v) == 'table' and rawget(v,'FireServer') then
+            getgenv().Network = v;  
+            break
+        end
+        if not Falling and type(v) == "table" and rawget(v, 'Ragdoll') and rawget(v, 'Unragdoll') then
+            getgenv().Falling = v
+        end
+    end
+    until Falling
+    local oldRagdoll = Falling.Ragdoll
+    Falling.Ragdoll = function(...)
+        return wait(9e9)
+    end
+end
+function GetCar(plr)
+    local Car = nil
+    local Short = math.huge
+    for i,v in pairs(workspace.Vehicles:GetChildren()) do 
+        for a,b in pairs(v:GetChildren()) do
+            if b:FindFirstChild('PlayerName') and b:FindFirstChild('PlayerName').Value == plr then
+                return v
+            end
+        end
+    end
+    return Car
+end
+function Teleport(Cframe)
+    local w = game:GetService("Players").LocalPlayer.Character.UpperTorso.Waist
+    w:Clone().Parent = w.Parent
+    w:Destroy()
+    wait()
+    game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = Cframe
+    pcall(function()
+        game:GetService("Players").LocalPlayer.Character.LeftFoot:Destroy()
+        game:GetService("Players").LocalPlayer.Character.RightFoot:Destroy()
+    end)
+end
+function EquipCuffs()
+    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
+        if v:IsA('ScreenGui') then
+            v.Enabled = false    
+        end
+    end
+    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.HotbarGui.Container:GetChildren()) do
+        if v:FindFirstChild('Icon') and v.Icon.Image == 'rbxassetid://700374045' then
+            Cuffs = v
+            x = require(game:GetService('ReplicatedStorage').Game.ItemSystem.ItemSystem)
+            x.Equip(game:GetService('Players').LocalPlayer,{i = Cuffs.Name,Frame = Cuffs.Icon,Name = "Handcuffs"})
+        end
+    end    
+end
+local Crim;
+repeat wait()
+    Crim = nil
+    if game.Players.LocalPlayer.Team.Name ~= 'Police' then
+        Crim = true
+        Network:FireServer('cdff874d','Police')
+        game.Players.LocalPlayer.CharacterAdded:Wait()
+        game.Players.LocalPlayer.Character:WaitForChild('UpperTorso')
+    end
+    for i,v in pairs(game.Players:GetPlayers()) do
+        if v.Team.Name == 'Criminal' and v.Character:FindFirstChild('HumanoidRootPart') and not v.Character:FindFirstChild('Handcuffs') then
+            if GetCar(v.Name) then
+                Crim = true
+                Teleport(v.Character.PrimaryPart.CFrame)
+                Network:FireServer('ba608c78',GetCar(v.Name)) 
+                EquipCuffs()
+            else
+                Crim = true
+                Teleport(v.Character.PrimaryPart.CFrame)
+                EquipCuffs()
+                Network:FireServer('a0adef98',v.Name)
+            end
+            break
+        end
+    end
+until not Crim
+
+print('done')
+ServerHop()
