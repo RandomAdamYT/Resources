@@ -69,7 +69,7 @@ repeat wait()
     Crim = nil
     if game.Players.LocalPlayer.Team.Name ~= 'Police' then
         Crim = true
-        Network:FireServer('cdff874d','Police')
+        Network:FireServer('ffa263b4','Police')
         game.Players.LocalPlayer.CharacterAdded:Wait()
         game.Players.LocalPlayer.Character:WaitForChild('UpperTorso')
     end
@@ -78,13 +78,13 @@ repeat wait()
             if GetCar(v.Name) then
                 Crim = true
                 Teleport(v.Character.PrimaryPart.CFrame)
-                Network:FireServer('ba608c78',GetCar(v.Name)) 
+                Network:FireServer('ff7d8a38',GetCar(v.Name)) 
                 EquipCuffs()
             else
                 Crim = true
                 Teleport(v.Character.PrimaryPart.CFrame)
                 EquipCuffs()
-                Network:FireServer('a0adef98',v.Name)
+                Network:FireServer('ccf645f2',v.Name)
             end
             break
         end
