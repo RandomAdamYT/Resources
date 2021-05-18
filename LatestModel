@@ -1,6 +1,8 @@
 repeat wait() until game:IsLoaded() and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart')
+pcall(function()
 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,game:GetService("Workspace").Maps.End.Light,0)
 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,game:GetService("Workspace").Maps.End.Light,1)
+end)
 function ServerHop() --Credit to fini my husband
     local HttpService, TPService = game:GetService("HttpService"), game:GetService("TeleportService")
     function RandomServer()
