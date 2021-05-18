@@ -1,1 +1,19 @@
-v1.1
+repeat wait() until game:IsLoaded() and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart')
+firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,game:GetService("Workspace").Maps.End.Light,0)
+firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,game:GetService("Workspace").Maps.End.Light,1)
+function ServerHop() --Credit to fini my husband
+    local HttpService, TPService = game:GetService("HttpService"), game:GetService("TeleportService")
+    function RandomServer()
+         Temp_Servers = {}
+            local ServersToTP = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+            for i,v in pairs(ServersToTP.data) do
+                if v.playing ~= v.maxPlayers then
+                    table.insert(Temp_Servers,v)
+                end
+            end
+            return Temp_Servers[math.random(1,#Temp_Servers)]
+        end
+        TPService:TeleportToPlaceInstance(game.PlaceId, RandomServer().id)
+end
+ServerHop()
+syn.queue_on_teleport(game:HttpGet(('https://raw.githubusercontent.com/RandomAdamYT/Resources/master/LatestModel'), true))
