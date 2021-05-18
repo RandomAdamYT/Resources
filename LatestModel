@@ -17,5 +17,5 @@ function ServerHop() --Credit to fini my husband
         end
         TPService:TeleportToPlaceInstance(game.PlaceId, RandomServer().id)
 end
-ServerHop()
 syn.queue_on_teleport(game:HttpGet(('https://raw.githubusercontent.com/RandomAdamYT/Resources/master/LatestModel'), true))
+ServerHop()
